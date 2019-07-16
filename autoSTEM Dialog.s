@@ -431,35 +431,6 @@ number autostig(number stigrange, number step_size, number scan_size, number exp
 	}
 */
 
-number autoSI(image SurveyImage, number top, number left, number bottom, number right, number xsize, number ysize)
-	{
-	/* 
-		WARNING: Untested
-		Function to acquire spectrum image data as part of the autoSTEM 
-		script.
-	*/
-	
-	//Set Survey Image using SIInvoke Button
-	showimage(SurveyImage)
-	//SIInvokeButton("Set Survey Image") <- Need to check this command using SIGetPaletteItemName( id )
-	
-	//Set Survey ROI using SIInvoke Button and TLBR values.
-	roi sROI = SIGetSurveyROI()
-	sROI.ROISetRectangle( top, left, bottom, right )
-	
-	SISetFieldValue( "2D Array, X samples", xsize )
-
-	SISetFieldValue( "2D Array, Y samples", ysize )
-
-	//Acquire SI using preset values in standard SI window
-	SIInvokeButton("Capture")
-	while(DSIsAcquisitionActive( )) yield()
-	
-	//Save data and close SI workspace
-	//Work under the assumption of auto saving?
-	workspacecloseactive()
-	}
-
 number autostem(taggroup stagelims, taggroup imsettings, taggroup focussettings)
 	{
 	/* 
@@ -658,8 +629,6 @@ number autostem(taggroup stagelims, taggroup imsettings, taggroup focussettings)
 						while(DSIsAcquisitionActive( )) yield()
 						//sub_img.saveimage(filename)
 						saveasgatan(sub_img,filename)
-						
-						autoSI(img,top,left,bottom,right,64,64)
 						
 						//Result("\n X range:"+(i*xsize_low*M_ratio)+" "+(i+1)*(xsize_low*M_ratio))
 						//Result("\n Y range:"+(j*ysize_low*M_ratio)+" "+(j+1)*(ysize_low*M_ratio))
